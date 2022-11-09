@@ -13,10 +13,13 @@ class ProfileController extends Controller
 {
     public function index()
     {
+        $count = Profile::select('gender', Profile::raw('COUNT(profile.gender) AS total'))->groupBy('gender')->get()->toArray();
+        $count = array_column($count, 'total');
         $data = Profile::orderBy('id', 'desc')->get();
-        //dd($data);
+
         return Inertia::render('Profile/Index', [
-            'data' => $data
+            'data' => $data,
+            'count' => $count
         ]);
     }
 
@@ -50,6 +53,7 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         Profile::destroy($id);
+        //$count = Profile::select('gender', Profile::raw('COUNT(profile.gender) AS total'))->groupBy('gender')->get()->toArray();
         return Redirect::route('home.index');
     }
 
