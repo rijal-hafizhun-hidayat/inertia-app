@@ -17,6 +17,7 @@ class Profile extends Model
         'no_tlp',
         'kk',
         'alamat',
+        'gambar',
         'tanggal_lahir'
     ];
     protected $guard = [];

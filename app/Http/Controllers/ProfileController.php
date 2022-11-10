@@ -36,8 +36,12 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function store()
+    public function store(Request $request)
     {
+        // if ($request->hasFile('gambar')) {
+        //     $filename = random_int(1, 10000000) . '-' . $data['nama'] . '.' . $request->gambar->extension();
+        //     dd($request->gambar->storeAs('public/images', $filename));
+        // }
         Profile::create($this->send());
 
         return Redirect::route('home.index')->with('message', 'berhasil input');
@@ -57,6 +61,10 @@ class ProfileController extends Controller
         return Redirect::route('home.index');
     }
 
+    public function filename()
+    {
+    }
+
     public function send()
     {
         $data = request()->validate(
@@ -66,6 +74,7 @@ class ProfileController extends Controller
                 'no_tlp' => 'required|numeric|digits_between:10,13',
                 'kk' => 'required',
                 'alamat' => 'required',
+                'gambar' => 'required|mimes:jpeg,png,jpg|max:2048',
                 'tanggal_lahir' => 'required|date'
             ],
             [
@@ -75,9 +84,15 @@ class ProfileController extends Controller
                 'no_tlp.digits_between' => 'nomor hp minimal 10 dan maksimal 13',
                 'kk.required' => 'wajib diisi',
                 'alamat.required' => 'wajib diisi',
+                'gambar.required' => 'wajib diisi',
+                'gambar.mimes' => 'file wajib extensi .jpg .png .jpeg',
+                'gambar.max' => 'maksimum ukuran file 2mb',
                 'tanggal_lahir.required' => 'wajib diisi'
             ]
         );
+
+        $data['gambar'] = random_int(1, 10000000) . '-' . $data['nama'] . '.' . request()->gambar->extension();
+        request()->gambar->storeAs('public/images', $data['gambar']);
 
         return $data;
     }

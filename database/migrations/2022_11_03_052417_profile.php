@@ -17,9 +17,10 @@ class Profile extends Migration
             $table->id();
             $table->string('nama');
             $table->integer('gender');
-            $table->integer('no_tlp');
+            $table->string('no_tlp');
             $table->string('kk');
             $table->text('alamat');
+            $table->string('gambar');
             $table->date('tanggal_lahir');
             $table->timestamps();
         });

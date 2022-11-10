@@ -62,6 +62,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="mb-3 row">
+                        <label for="gambar" class="col-sm-2 col-form-label">Gambar:</label>
+                        <div class="col-sm-10">
+                            <input type="file" name="gambar" :class="errors.gambar ? 'is-invalid' : ''" @input="data.gambar = $event.target.files[0]" id="gambar" accept="image/png, image/jpeg">
+                            <div v-if="errors.gambar" class="invalid-feedback">
+                                {{ errors.gambar }}
+                            </div>
+                        </div>
+                    </div>
                     <div class="mb-3">
                         <input type="submit" class="btn btn-primary" value="Submit">
                     </div>
@@ -76,7 +85,7 @@ import Nav from './components/Nav.vue'
 import NProgress from 'nprogress'
 import { Inertia } from '@inertiajs/inertia'
 import { onMounted, reactive } from '@vue/runtime-core'
-import { usePage } from '@inertiajs/inertia-vue3'
+import { useForm, usePage } from '@inertiajs/inertia-vue3'
 import Swal from 'sweetalert2'
 
 export default {
@@ -87,12 +96,13 @@ export default {
     },
 
     setup(props){
-        const data = reactive({
+        const data = useForm({
             nama: '',
             gender: '',
             no_tlp: '',
             kk: '',
             alamat: '',
+            gambar: '',
             tanggal_lahir: ''
         })
 
@@ -102,7 +112,7 @@ export default {
         })
 
         function save(){
-            Inertia.post('/post', data)
+            data.post('/post', data)
         }
 
         function NumbersOnly(evt) {
